@@ -43,28 +43,17 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	// Groovy necesario para Spock
-	//testImplementation 'org.apache.groovy:groovy:4.0.6'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	// Para permitir mocks con Spock
-	//testImplementation 'org.mockito:mockito-core:4.8.0'
-
-	// Spock para pruebas unitarias con Groovy
-	//testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0' // Asegurar compatibilidad con Groovy 4
-	//testImplementation 'org.spockframework:spock-spring:2.3-groovy-4.0' // Integración con Spring Boot
-
-	// Pruebas con Spring Boot
-	//testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	//testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-	//Logs
-	// implementation 'org.springframework.boot:spring-boot-starter-logging'
 }
 
 springBoot {
     mainClass = 'com.xabier.desafio.UserApiMicroserviceApplication'
 }
 
-//tasks.named('test') {
-//	useJUnitPlatform() // Permite ejecutar pruebas con Spock y JUnit 5
-//}
+test {
+    useJUnitPlatform()
+}
