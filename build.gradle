@@ -1,0 +1,70 @@
+plugins {
+	id 'java'
+	id 'groovy' // Habilitar Groovy para Spock
+	id 'org.springframework.boot' version '2.7.4'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.xabier.desafio'
+version = '1.0.0'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Dependencias principales de Spring Boot
+	implementation('org.springframework.boot:spring-boot-starter-data-jpa') {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
+	implementation('org.springframework.boot:spring-boot-starter-validation') {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
+	implementation('org.springframework.boot:spring-boot-starter-web') {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
+	implementation('org.springframework.boot:spring-boot-starter') {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
+
+	// Log4j2
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+
+	//db H2
+	runtimeOnly 'com.h2database:h2'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// Groovy necesario para Spock
+	//testImplementation 'org.apache.groovy:groovy:4.0.6'
+
+	// Para permitir mocks con Spock
+	//testImplementation 'org.mockito:mockito-core:4.8.0'
+
+	// Spock para pruebas unitarias con Groovy
+	//testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0' // Asegurar compatibilidad con Groovy 4
+	//testImplementation 'org.spockframework:spock-spring:2.3-groovy-4.0' // Integración con Spring Boot
+
+	// Pruebas con Spring Boot
+	//testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	//Logs
+	// implementation 'org.springframework.boot:spring-boot-starter-logging'
+}
+
+springBoot {
+    mainClass = 'com.xabier.desafio.UserApiMicroserviceApplication'
+}
+
+//tasks.named('test') {
+//	useJUnitPlatform() // Permite ejecutar pruebas con Spock y JUnit 5
+//}

@@ -1,0 +1,42 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Java
+*.class
+
+# Environment
+.env
+
+# Test reports
+test-output/
+out/
+bin/
+
+# H2 database files
+*.h2.db
+*.mv.db
+
+# Lombok generated files
+lombok.config
+
+# Others
+*.tmp
+*.bak
