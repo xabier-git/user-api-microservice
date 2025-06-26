@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleUserException(UserException ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("mensaje", ex.getMessage());
-        logger.error("Fallo en la API Usuario " + ex.getMessage(), ex);
+        logger.error("Fallo en la API Usuario - " + ex.getMessage());
         return new ResponseEntity<>(body, ex.getHttpStatus());
     }
 
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("message", ex.getMessage());
-        logger.error("Error General ",  ex);
+        logger.error("Error General",  ex);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

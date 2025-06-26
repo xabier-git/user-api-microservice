@@ -42,9 +42,7 @@ public class UserController {
             return ResponseEntity.status(201).body(userView);
         } catch (BussinesException e) {
             throw new UserException("Error de Negocio :" + e.getMessage(), e, HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            throw new UserException("Error General Interno", e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        } 
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,9 +56,7 @@ public class UserController {
             return new ResponseEntity<>( body, HttpStatus.OK);
         } catch (BussinesException e) {
             throw new UserException("Error de Negocio :" + e.getMessage(), e, HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            throw new UserException("Error General Interno", e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        } 
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,9 +70,7 @@ public class UserController {
             return ResponseEntity.ok(updatedUser);
         } catch (BussinesException e) {
             throw new UserException("Error de Negocio :" + e.getMessage(), e, HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            throw new UserException("Error General Interno", e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        } 
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,8 +81,6 @@ public class UserController {
             return ResponseEntity.ok(users);
         } catch (BussinesException e) {
             throw new UserException("Error de Negocio :" + e.getMessage(), e, HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            throw new UserException("Error General Interno", e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -101,9 +93,7 @@ public class UserController {
             return ResponseEntity.ok(userView);
         } catch (BussinesException e) {
             throw new UserException("Error de Negocio :" + e.getMessage(), e, HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            throw new UserException("Error General Interno", e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        } 
     }
   
 }
