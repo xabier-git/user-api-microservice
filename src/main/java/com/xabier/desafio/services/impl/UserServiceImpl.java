@@ -1,16 +1,16 @@
 package com.xabier.desafio.services.impl;
 
-import com.xabier.desafio.exception.BussinesException;
+import com.xabier.desafio.exception.ValidationException;
 import com.xabier.desafio.model.User;
 import com.xabier.desafio.repository.UserRepository;
 import com.xabier.desafio.services.UserService;
 import com.xabier.desafio.utils.Cons;
 import com.xabier.desafio.view.PhoneView;
 import com.xabier.desafio.view.UserView;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserRepository userRepository;
 
@@ -32,25 +32,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserView addUser(User user) throws BussinesException {
-        logger.info(null != user ? "Añadiendo usuario: " + user.getName() : "Usuario nulo recibido" );
+    public UserView addUser(User user) {
+        logger.info(null != user ? "Añadiendo usuario: " + user.getName() : "Usuario nulo recibido");
 
         // Validar formato de email
         if (!Pattern.matches(Cons.EMAIL_PATTERN, user.getEmail())) {
-            logger.error("El email no cumple con el formato requerido: " + user.getEmail());   
-            throw new BussinesException("El email no cumple con el formato requerido.");
+            logger.error("El email no cumple con el formato requerido: " + user.getEmail());
+            throw new ValidationException("El email no cumple con el formato requerido.", HttpStatus.BAD_REQUEST);
         }
 
         // Validar email único
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             logger.error("El email ya existe en la base de datos: " + user.getEmail());
-            throw new BussinesException("El email ya existe en la base de datos.");
+            throw new ValidationException("El email ya existe en la base de datos.", HttpStatus.BAD_REQUEST);
         }
 
         // Validar formato de password
         if (!Pattern.matches(Cons.PASSWORD_PATTERN, user.getPassword())) {
             logger.error("La contraseña no cumple con el formato requerido.");
-            throw new BussinesException("La contraseña no cumple con el formato requerido.");
+            throw new ValidationException("La contraseña no cumple con el formato requerido.", HttpStatus.BAD_REQUEST);
         }
 
         // Setear propiedades
@@ -81,17 +81,16 @@ public class UserServiceImpl implements UserService {
                 savedUser.getModified(),
                 savedUser.getLast_login(),
                 savedUser.getToken(),
-                savedUser.isActive()
-        );
+                savedUser.isActive());
     }
 
     @Override
-    public void deleteUser(Long id) throws BussinesException {
+    public void deleteUser(Long id) {
         logger.info("Eliminando usuario con ID: " + id);
 
         if (userRepository.findById(id).isEmpty()) {
             logger.error("Usuario no encontrado con ID: " + id);
-            throw new BussinesException("El usuario no existe en la base de datos.");
+            throw new ValidationException("El usuario no existe en la base de datos.", HttpStatus.NOT_FOUND);
         } else {
             userRepository.deleteById(id);
             logger.debug("Usuario eliminado con ID: " + id);
@@ -99,42 +98,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserView updateUser(User user) throws BussinesException {
-      
+    public UserView updateUser(User user) {
+
         logger.info("Actualizando usuario: " + user.getName());
         User existingUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new BussinesException("Usuario no encontrado con ID: " + user.getId()));
+                .orElseThrow(() -> new ValidationException("Usuario no encontrado con ID: " + user.getId(),
+                        HttpStatus.NOT_FOUND));
+                        
 
-         // Validar formato de email
+        // Validar formato de email
         if (!Pattern.matches(Cons.EMAIL_PATTERN, user.getEmail())) {
-            logger.error("El email no cumple con el formato requerido: " + user.getEmail());   
-            throw new BussinesException("El email no cumple con el formato requerido.");
+            logger.error("El email no cumple con el formato requerido: " + user.getEmail());
+            throw new ValidationException("El email no cumple con el formato requerido.", HttpStatus.BAD_REQUEST);
         }
 
-  
-           // No modificar el email si ya existe
-            logger.debug("comparando email existente: " + existingUser.getEmail() + " con nuevo email: " + user.getEmail()  );
-            if (!existingUser.getEmail().equals(user.getEmail())) {
-                 logger.warn("se comparará la preexistencia del email: " + user.getEmail());
-                 
-                if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-                    logger.debug("El email pre existe en la base de datos: " + user.getEmail());
-                    throw new BussinesException("El email ya existe en la base de datos.");
-                
-                } else {
-                    logger.info("nuevo mail en BD:"+user.getEmail());
-                    existingUser.setEmail(user.getEmail());
-                }
+        // No modificar el email si ya existe
+        logger.debug("comparando email existente: " + existingUser.getEmail() + " con nuevo email: " + user.getEmail());
+        if (!existingUser.getEmail().equals(user.getEmail())) {
+            logger.warn("se comparará la preexistencia del email: " + user.getEmail());
+
+            if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+                logger.debug("El email pre existe en la base de datos: " + user.getEmail());
+                throw new ValidationException("El email ya existe en la base de datos.", HttpStatus.BAD_REQUEST);
+
+            } else {
+                logger.info("nuevo mail en BD:" + user.getEmail());
+                existingUser.setEmail(user.getEmail());
+            }
         } else {
             logger.debug("El email no ha cambiado, manteniendo: " + existingUser.getEmail());
         }
-        
+
         // Validar formato de password
         if (!Pattern.matches(Cons.PASSWORD_PATTERN, user.getPassword())) {
             logger.error("La contraseña no cumple con el formato requerido.");
-            throw new BussinesException("La contraseña no cumple con el formato requerido.");
+            throw new ValidationException("La contraseña no cumple con el formato requerido.", HttpStatus.BAD_REQUEST);
         }
-                
+
         existingUser.setName(user.getName());
         existingUser.setPassword(user.getPassword());
         existingUser.setModified(LocalDateTime.now());
@@ -146,19 +146,18 @@ public class UserServiceImpl implements UserService {
                 existingUser.getId(),
                 existingUser.getName(),
                 existingUser.getEmail(),
-                existingUser.getPhones() != null ? 
-                    existingUser.getPhones().stream()
+                existingUser.getPhones() != null ? existingUser.getPhones().stream()
                         .map(phone -> new PhoneView(phone.getNumber()))
                         .collect(Collectors.toList()) : null,
                 existingUser.getCreated(),
                 existingUser.getModified(),
                 existingUser.getLast_login(),
                 existingUser.getToken(),
-                existingUser.isActive()
-        );}
+                existingUser.isActive());
+    }
 
     @Override
-    public List<UserView> getAllUsers() throws BussinesException {
+    public List<UserView> getAllUsers() {
         logger.info("Obteniendo todos los usuarios");
         List<User> users = userRepository.findAll();
         return users.stream()
@@ -166,24 +165,24 @@ public class UserServiceImpl implements UserService {
                         user.getId(),
                         user.getName(),
                         user.getEmail(),
-                        user.getPhones() != null ?
-                            user.getPhones().stream()
+                        user.getPhones() != null ? user.getPhones().stream()
                                 .map(phone -> new PhoneView(phone.getNumber()))
                                 .collect(Collectors.toList()) : null,
                         user.getCreated(),
                         user.getModified(),
                         user.getLast_login(),
                         user.getToken(),
-                        user.isActive()
-                ))
+                        user.isActive()))
                 .collect(Collectors.toList());
 
-}
+    }
+
     @Override
-    public UserView getUserById(Long id) throws BussinesException {
+    public UserView getUserById(Long id) {
         logger.info("Buscando usuario por ID: " + id);
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new BussinesException("Usuario no encontrado con ID: " + id));
+                .orElseThrow(() -> new ValidationException("Usuario no encontrado con ID: " + id,
+                        HttpStatus.NOT_FOUND));
 
         logger.debug("Usuario encontrado: " + user);
         List<PhoneView> phoneViews = null;
@@ -202,13 +201,7 @@ public class UserServiceImpl implements UserService {
                 user.getModified(),
                 user.getLast_login(),
                 user.getToken(),
-                user.isActive()
-        );
-}
-    @Override
-    public UserView getUserByEmail(String email) throws BussinesException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUserByEmail'");
+                user.isActive());
     }
 
 }

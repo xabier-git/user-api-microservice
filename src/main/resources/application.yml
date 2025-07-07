@@ -11,3 +11,15 @@ spring:
   h2:
     console:
       enabled: true
+
+logging:
+  level:
+    root: INFO
+    com.xabier.desafio: DEBUG
+
+app:
+  security:
+    jwt:
+      secret-key: Mi-ClaveSecretaJWT-XabierWolf
+      seconds-expiration: 3600 # in seconds
+ 

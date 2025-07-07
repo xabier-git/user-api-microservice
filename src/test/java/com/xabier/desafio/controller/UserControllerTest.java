@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.xabier.desafio.security.JwtUtil;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -27,7 +29,10 @@ class UserControllerTest {
     @Autowired
     private UserRepository userRepository;
 
-    
+ */ 
+    @Autowired
+    private JwtUtil jwtUtil;
+ /*
     @BeforeEach
     void cleanDb() {
         userRepository.deleteAll();
@@ -48,12 +53,15 @@ class UserControllerTest {
                 + "    }"
                 + "]"
                 + "}";
+        
+                // Generar un token JWT para la autenticación 
+        String token = jwtUtil.generateToken("juan@rodriguez.org");
 
-        mockMvc.perform(post("/users/api/v1")
+        mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.mensaje").value("Error de Negocio :El email no cumple con el formato requerido."));
+                .content(json).header("Authorization", "Bearer " + token))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.mensaje").value("El email no cumple con el formato requerido."));
                 
     }
 
@@ -61,23 +69,26 @@ class UserControllerTest {
     void addUser_WrongPassword() throws Exception {
         System.out.println("addUser_WrongPassword");
         String json = "{"
-                + "\"name\": \"Juan Rodriguez\","
-                + "\"email\": \"juan@rodriguez.org\","
-                + "\"password\": \"hunter2\","
+                + "\"name\": \"Javier Aguirre\","
+                + "\"email\": \"javier.aguirre.araya@gmail.com\","
+                + "\"password\": \"Almavelo8\","
                 + "\"phones\": ["
                 + "    {"
-                + "        \"number\": \"1234567\","
-                + "        \"citycode\": \"1\","
-                + "        \"contrycode\": \"57\""
+                + "        \"number\": \"941894839\","
+                + "        \"citycode\": \"105\","
+                + "        \"countrycode\": \"56\""
                 + "    }"
                 + "]"
                 + "}";
+        
+        // Generar un token JWT para la autenticación
+          String token = jwtUtil.generateToken("javier.aguirre.araya@gmail.com");
 
-        mockMvc.perform(post("/users/api/v1")
+        mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isInternalServerError())                     
-                .andExpect(jsonPath("$.mensaje").value("Error de Negocio :La contraseña no cumple con el formato requerido."));
+                .content(json).header("Authorization", "Bearer " + token))
+                .andExpect(status().isBadRequest())                     
+                .andExpect(jsonPath("$.mensaje").value("La contraseña no cumple con el formato requerido."));
                 
     }
 
@@ -85,28 +96,30 @@ class UserControllerTest {
     void addUser_returnsCreatedUserView() throws Exception {
         System.out.println("addUser_returnsCreatedUserView");
         String json = "{"
-                + "\"name\": \"Juan Rodriguez\","
-                + "\"email\": \"juan@rodriguez.org\","
-                + "\"password\": \"Hun77er2\","
+                + "\"name\": \"Javier Aguirre\","
+                + "\"email\": \"javier.aguirre.araya@gmail.com\","
+                + "\"password\": \"Almevos66\","
                 + "\"phones\": ["
                 + "    {"
-                + "        \"number\": \"1234567\","
-                + "        \"citycode\": \"1\","
-                + "        \"contrycode\": \"57\""
+                + "        \"number\": \"941894839\","
+                + "        \"citycode\": \"100\","
+                + "        \"contrycode\": \"56\""
                 + "    }"
                 + "]"
                 + "}";
         System.out.println("JSON: " + json);
-        mockMvc.perform(post("/users/api/v1")
+        // Generar un token JWT para la autenticación
+        String token = jwtUtil.generateToken("javier.aguirre.araya@gmail.com");
+        mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
+                .content(json).header("Authorization", "Bearer " + token))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("Juan Rodriguez"))
-                .andExpect(jsonPath("$.email").value("juan@rodriguez.org"))
+                .andExpect(jsonPath("$.name").value("Javier Aguirre"))
+                .andExpect(jsonPath("$.email").value("javier.aguirre.araya@gmail.com"))
                 .andExpect(jsonPath("$.phones").isArray())
-                .andExpect(jsonPath("$.phones[0].number").value("1234567"));
+                .andExpect(jsonPath("$.phones[0].number").value("941894839"));
     }
-/* 
+/*  
     @Test
     void getUserById_returnsUserView() throws Exception {
         System.out.println("getUserById_returnsUserView");
