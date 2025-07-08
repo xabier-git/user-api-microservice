@@ -22,6 +22,7 @@ public class JwtUtil {
     public String generateToken(String username) {
         logger.debug("obteniendo secret-key: " + SECRET_KEY);
         logger.info("obteniendo segundos de expiración: " + seconds);
+        
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -34,10 +35,10 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token)
                 .getBody().getSubject();
     }
-
+   
     public boolean validateToken(String token, String username) {
         String extracted = extractUsername(token);
-        System.out.println("Token esValido? "+ (extracted.equals(username) && !isTokenExpired(token)));
+        logger.debug("Token esValido? "+ (extracted.equals(username) && !isTokenExpired(token)));
         return extracted.equals(username) && !isTokenExpired(token);
     }
 

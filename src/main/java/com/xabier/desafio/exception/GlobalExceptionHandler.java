@@ -7,13 +7,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import io.jsonwebtoken.ExpiredJwtException;
+
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Map<String, Object>> handleUserException(ValidationException ex) {
@@ -23,19 +26,29 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, ex.getStatus());
     }
 
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<Map<String, Object>> handleExpiredJwtException(ExpiredJwtException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("message", "El token JWT ha expirado");
+        logger.warn("Token JWT expirado detectado: {}", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("message", ex.getMessage());
-        logger.error("Error General",  ex);
+        logger.error("Error General", ex);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("message", ex.getMessage());
-        logger.error("Error Inesperado", ex);
-        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);    
-    }
+    /*
+     * @ExceptionHandler(RuntimeException.class)
+     * public ResponseEntity<Map<String, Object>>
+     * handleRuntimeException(RuntimeException ex) {
+     * Map<String, Object> body = new HashMap<>();
+     * body.put("message", ex.getMessage());
+     * logger.error("Error Inesperado", ex);
+     * return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+     * }
+     */
 }
