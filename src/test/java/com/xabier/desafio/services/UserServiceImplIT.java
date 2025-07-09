@@ -2,6 +2,7 @@ package com.xabier.desafio.services;
 
 import com.xabier.desafio.model.User;
 import com.xabier.desafio.services.UserService;
+import com.xabier.desafio.view.UserInput;
 import com.xabier.desafio.view.UserView;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,16 @@ public class UserServiceImplIT {
     @Autowired
     private UserService userService;
 
+    /**
+     * @throws Exception
+     */
     @Test
     void addUser_validUser_returnsUserView() throws Exception {
-        User user = new User();
-        user.setName("Test User");
+        UserInput userInput = new UserInput("Test User", "testuser@example.com", "Hun77er2", null);
+        /*user.setName("Test User");
         user.setEmail("testuser@example.com");
-        user.setPassword("Hun77er2");
-        UserView userView = userService.addUser(user);
+        user.setPassword("Hun77er2");*/
+        UserView userView = userService.addUser(userInput,"");
         assertEquals("Test User", userView.getName());
         assertEquals("testuser@example.com", userView.getEmail());
     }

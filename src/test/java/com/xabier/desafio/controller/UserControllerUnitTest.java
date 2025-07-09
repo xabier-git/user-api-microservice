@@ -4,6 +4,7 @@ import com.xabier.desafio.security.JwtRequestFilter;
 import com.xabier.desafio.security.JwtUtil;
 import com.xabier.desafio.security.SecurityConfig;
 import com.xabier.desafio.services.UserService;
+import com.xabier.desafio.view.UserInput;
 import com.xabier.desafio.view.UserView;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,14 +17,17 @@ import org.springframework.context.annotation.Import;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 /*
  * 3. Pruebas de Controlador (unitarias, solo el controlador, servicios mockeados)
  */
 @WebMvcTest(UserController.class)
-//@Import(SecurityConfig.class) // solo si necesitas el config mínimo
+// @Import(SecurityConfig.class) // solo si necesitas el config mínimo
 @AutoConfigureMockMvc(addFilters = false) // ⬅️ DESACTIVA filtros de seguridad como JWT
 
 public class UserControllerUnitTest {
@@ -45,8 +49,10 @@ public class UserControllerUnitTest {
         UserView userView = new UserView();
         userView.setName("Juan Rodriguez");
         userView.setEmail("juan@rodriguez.org");
-        Mockito.when(userService.addUser(any())).thenReturn(userView);
-
+        // Simular comportamiento del mock del servicio
+        Mockito.when(userService.addUser(Mockito.argThat(input -> input.name().equals("Juan Rodriguez") &&
+                input.email().equals("juan@rodriguez.org")), Mockito.anyString()))
+                .thenReturn(userView);
         String json = "{"
                 + "\"name\": \"Juan Rodriguez\","
                 + "\"email\": \"juan@rodriguez.org\","
@@ -56,7 +62,9 @@ public class UserControllerUnitTest {
 
         mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer tu-token-de-prueba")
                 .content(json))
+                .andDo(print()) // <--- esta línea te muestra el detalle
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Juan Rodriguez"))
                 .andExpect(jsonPath("$.email").value("juan@rodriguez.org"));

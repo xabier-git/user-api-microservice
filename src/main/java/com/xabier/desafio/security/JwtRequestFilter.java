@@ -37,18 +37,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             logger.info("URI de la solicitud: " + request.getRequestURI());
 
             // Verificar si el token está presente y es válido
-            // Si no está presente, se permite el acceso a la ruta de usuarios
-            // (esto es útil para permitir el registro de nuevos usuarios sin autenticación)
-            // Si el token está presente, se valida y se establece la autenticación en el contexto
+            // Si no está presente y las rutas que comienzan con /api/v1/users          
             // Si el token no es válido o está ausente, se envía una respuesta de error 401 Unauthorized
-            // Solo se aplica a las rutas que comienzan con /api/v1/users
-            // Esto permite que las rutas de usuarios (registro, inicio de sesión) funcionen sin autenticación previa
-            // Si el token no es válido, se envía una respuesta de error 401 Unauthorized
-            // Si el token es válido, se establece la autenticación en el contexto de seguridad
-            // Si el token no está presente, se permite el acceso a las rutas de usuarios
-            // Si el token está presente pero no es válido, se envía una respuesta de error 401 Unauthorized
-            // Si el token es válido, se establece la autenticación en el contexto
-            // Si el token es válido, se permite el acceso a las rutas protegidas
+            // Esto permite que las rutas de usuarios (registro, inicio de sesión) funcionen sin autenticación previa         
             // Si el token no es válido, se envía una respuesta de error 401 Unauthorized
             if((authHeader == null || authHeader.isEmpty() || !authHeader.startsWith("Bearer ")
                     || authHeader.length() < 8 ) && request.getRequestURI().startsWith("/api/v1/users")) {
@@ -56,7 +47,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 sendErrorResponse(response, "Token no proporcionado", HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-
+            // Si el token está presente, se valida y se establece la autenticación en el contexto
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
                 String token = authHeader.substring(7);

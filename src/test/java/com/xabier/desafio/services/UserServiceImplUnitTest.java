@@ -4,6 +4,7 @@ import com.xabier.desafio.exception.ValidationException;
 import com.xabier.desafio.model.User;
 import com.xabier.desafio.repository.UserRepository;
 import com.xabier.desafio.services.impl.UserServiceImpl;
+import com.xabier.desafio.view.UserInput;
 import com.xabier.desafio.view.UserView;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -25,13 +26,13 @@ public class UserServiceImplUnitTest {
     @Test
     void addUser_invalidEmail_throwsException() {
         UserRepository userRepository = mock(UserRepository.class);
-        UserServiceImpl userService = new UserServiceImpl(userRepository);
+        UserService userService = new UserServiceImpl(userRepository);
 
-        User user = new User();
-        user.setEmail("bademail");
-        user.setPassword("Hun77er2");
+        UserInput userInput = new UserInput("", "bademail", "Hun77er2", null);
+        //userInput.setEmail("bademail");
+        //userInput.setPassword("Hun77er2");
 
-        Exception ex = assertThrows(ValidationException.class, () -> userService.addUser(user));
+        Exception ex = assertThrows(ValidationException.class, () -> userService.addUser(userInput,""));
         assertTrue(ex.getMessage().contains("El email no cumple con el formato requerido."));
     }
 }

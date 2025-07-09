@@ -4,7 +4,11 @@ import com.xabier.desafio.exception.ValidationException;
 
 import com.xabier.desafio.model.User;
 import com.xabier.desafio.services.UserService;
+import com.xabier.desafio.view.UserInput;
 import com.xabier.desafio.view.UserView;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,10 +38,12 @@ public class UserController {
 
     // Crear usuario
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserView> addUser(@RequestBody User user)  {
-            UserView userView;
-            logger.info("Intentando crear usuario: " + user.getName());
-            userView = userService.addUser(user);
+    public ResponseEntity<UserView> addUser(@Valid @RequestBody UserInput userInput,HttpServletRequest request)  {
+            // Validado en el filter de seguridad JWT   
+            String authHeader = request.getHeader("Authorization");
+            String token = authHeader.substring(7);
+            logger.info("Intentando crear usuario: " + userInput.name());
+            UserView userView = userService.addUser(userInput,token);
             logger.debug("Usuario creado exitosamente: " + userView.getName() + " con ID: " + userView.getId());
             return ResponseEntity.status(201).body(userView);
        
@@ -56,11 +62,10 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserView> updateUser(@PathVariable Long id, @RequestBody User user)  {
+    public ResponseEntity<UserView> updateUser(@PathVariable Long id, @RequestBody UserInput userInput)  {
     
             logger.info("Intentando actualizar usuario con ID: " + id);
-            user.setId(id); // Asegura que el ID del path se use
-            UserView updatedUser = userService.updateUser(user);
+            UserView updatedUser = userService.updateUser(id,userInput);
             logger.debug(
                     "Usuario actualizado exitosamente: " + updatedUser.getName() + " con ID: " + updatedUser.getId());
             return ResponseEntity.ok(updatedUser);

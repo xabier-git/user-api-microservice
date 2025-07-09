@@ -378,10 +378,50 @@
 			"response": []
 		},
 		{
-			"name": "getUser",
+			"name": "Obtiene Usuario",
 			"request": {
 				"method": "GET",
 				"header": []
+			},
+			"response": [
+				{
+					"name": "Obtiene Usuario 1",
+					"originalRequest": {
+						"method": "GET",
+						"header": []
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "http://localhost:8080/api/v1/users/1",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjAzMDc1MCwiZXhwIjoxNzUyMDM0MzUwfQ.c6b_sJC8P_lycO_KNYV-MnyNFd8zmCIw8lml5pzuuwI",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"1"
+					]
+				}
 			},
 			"response": []
 		}
