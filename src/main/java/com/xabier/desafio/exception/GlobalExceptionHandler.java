@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -34,6 +35,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
     }
 
+     @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+            errors.put(error.getField(), error.getDefaultMessage()));
+        return ResponseEntity.badRequest().body(errors);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
         Map<String, Object> body = new HashMap<>();
@@ -41,14 +50,5 @@ public class GlobalExceptionHandler {
         logger.error("Error General", ex);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    /*
-     * @ExceptionHandler(RuntimeException.class)
-     * public ResponseEntity<Map<String, Object>>
-     * handleRuntimeException(RuntimeException ex) {
-     * Map<String, Object> body = new HashMap<>();
-     * body.put("message", ex.getMessage());
-     * logger.error("Error Inesperado", ex);
-     * return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
-     * }
-     */
+   
 }

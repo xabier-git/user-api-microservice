@@ -3,7 +3,9 @@ package com.xabier.desafio.controller;
 import com.xabier.desafio.exception.ValidationException;
 
 import com.xabier.desafio.model.User;
+import com.xabier.desafio.security.JwtUtil;
 import com.xabier.desafio.services.UserService;
+import com.xabier.desafio.view.LoginRequest;
 import com.xabier.desafio.view.UserInput;
 import com.xabier.desafio.view.UserView;
 
@@ -22,12 +24,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     private final UserService userService;
 
@@ -38,12 +44,10 @@ public class UserController {
 
     // Crear usuario
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserView> addUser(@Valid @RequestBody UserInput userInput,HttpServletRequest request)  {
-            // Validado en el filter de seguridad JWT   
-            String authHeader = request.getHeader("Authorization");
-            String token = authHeader.substring(7);
-            logger.info("Intentando crear usuario: " + userInput.name());
-            UserView userView = userService.addUser(userInput,token);
+    public ResponseEntity<UserView> addUser(@Valid @RequestBody UserInput userInput)  {
+        
+            logger.info("Creando usuario: " + userInput.name());
+            UserView userView = userService.addUser(userInput);
             logger.debug("Usuario creado exitosamente: " + userView.getName() + " con ID: " + userView.getId());
             return ResponseEntity.status(201).body(userView);
        
@@ -78,9 +82,7 @@ public class UserController {
             logger.info("Obteniendo todos los usuarios");
             List<UserView> users = userService.getAllUsers();
             return ResponseEntity.ok(users);
- 
     }
-
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserView> getUserById(@PathVariable Long id) {
@@ -91,4 +93,18 @@ public class UserController {
 
     }
   
+
+    @GetMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> getToken() {
+
+            String token = jwtUtil.generateToken("admin");
+            // En este punto, deberías guardar el token en la sesión del usuario o en un lugar seguro
+            // no debes exponer el token directamente en un entorno de producción
+            // Aquí solo se genera un token jwt temporal para un eventual usuario "admin"
+            logger.debug("Token generado para uso de las api: " + token);
+            return ResponseEntity.ok(Map.of("token", token));
+       
+    }
+
+
 }

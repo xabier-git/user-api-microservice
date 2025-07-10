@@ -61,7 +61,7 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json).header("Authorization", "Bearer " + token))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.mensaje").value("El email no cumple con el formato requerido."));
+                .andExpect(jsonPath("$.email").value("El email no cumple con el formato requerido"));
                 
     }
 

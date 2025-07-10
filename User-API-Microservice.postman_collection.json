@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "Lista Todo",
+			"name": "Trae Usuarios",
 			"event": [
 				{
 					"listen": "test",
@@ -47,6 +47,33 @@
 					"name": "getAllUsers",
 					"originalRequest": {
 						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjExNDM1NSwiZXhwIjoxNzUyMTE3OTU1fQ.F4ADWIB_-mK-HMXV8kwooNi0hcb70o7PzJbz-HkEGss",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{user-api-micro_URL}}",
+							"host": [
+								"{{user-api-micro_URL}}"
+							]
+						}
+					},
+					"_postman_previewlanguage": "",
+					"header": [],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": ""
+				},
+				{
+					"name": "getUser",
+					"originalRequest": {
+						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/info?id=1",
@@ -61,6 +88,31 @@
 									"key": "id",
 									"value": "1"
 								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "Trae el Token",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"token"
 							]
 						}
 					},
@@ -112,13 +164,19 @@
 			},
 			"response": [
 				{
-					"name": "addUser_Juan",
+					"name": "ingresa_Juan",
 					"originalRequest": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjExNDM1NSwiZXhwIjoxNzUyMTE3OTU1fQ.F4ADWIB_-mK-HMXV8kwooNi0hcb70o7PzJbz-HkEGss",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+							"raw": "{\n\"name\" : \"Juan Rodriguez\" ,\n\"email\" : \"juan@rodriguez.org\" ,\n\"password\" : \"Hun77e\" ,\n\"phones\" : [\n{\n\"number\" : \"1234567\" ,\n\"citycode\" : \"1\" ,\n\"contrycode\" : \"57\"\n}\n]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -126,28 +184,45 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/info",
+							"raw": "http://localhost:8080/api/v1/users",
+							"protocol": "http",
 							"host": [
-								"{{base_url}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
-								"info"
+								"api",
+								"v1",
+								"users"
 							]
 						}
 					},
-					"_postman_previewlanguage": null,
-					"header": null,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
 					"cookie": [],
-					"body": null
+					"body": ""
 				},
 				{
 					"name": "addUser_Javier",
 					"originalRequest": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjExNDM1NSwiZXhwIjoxNzUyMTE3OTU1fQ.F4ADWIB_-mK-HMXV8kwooNi0hcb70o7PzJbz-HkEGss",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+							"raw": "{\n    \"name\" : \"Javier Aguirre\" ,\n    \"email\" : \"javier.aguirre.araya@gmail.com\" ,\n    \"password\" : \"Almaveloz77\" ,\n    \"phones\" : [\n        {\n        \"number\" : \"941894839\" ,\n        \"citycode\" : \"100\" ,\n        \"contrycode\" : \"56\"\n        },\n             {\n        \"number\" : \"989549924\" ,\n        \"citycode\" : \"100\" ,\n        \"contrycode\" : \"56\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -155,12 +230,16 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/info",
+							"raw": "http://localhost:8080/api/v1/users",
+							"protocol": "http",
 							"host": [
-								"{{base_url}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
-								"info"
+								"api",
+								"v1",
+								"users"
 							]
 						}
 					},
@@ -197,63 +276,21 @@
 					"header": null,
 					"cookie": [],
 					"body": null
-				}
-			]
-		},
-		{
-			"name": "updateUser",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Successful PUT request\", function () {",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
-							"});",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
 				},
-				"url": {
-					"raw": "{{base_url}}/info?id=1",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"info"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1"
-						}
-					]
-				},
-				"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
-			},
-			"response": [
 				{
-					"name": "updateUser",
+					"name": "Ingresa_Ana",
 					"originalRequest": {
-						"method": "PUT",
-						"header": [],
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjEyMTE3NiwiZXhwIjoxNzUyMTI0Nzc2fQ.Oic8fXS4p3TPEBKy3hOkEgAf_THq5MIe2O5e9WeVxL0",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+							"raw": "{\n  \"name\": \"Ana Torres\",\n  \"email\": \"ana@torres.org\",\n  \"password\": \"S3cretPass7!\",\n  \"phones\": [\n    {\n      \"number\": \"7654321\",\n      \"citycode\": \"2\",\n      \"contrycode\": \"56\"\n    }\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -261,18 +298,77 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/info?id=1",
+							"raw": "{{user-api-micro_URL}}",
 							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"info"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "1"
+								"{{user-api-micro_URL}}"
+							]
+						}
+					},
+					"_postman_previewlanguage": "",
+					"header": [],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": ""
+				},
+				{
+					"name": "add_noname",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjExNDM1NSwiZXhwIjoxNzUyMTE3OTU1fQ.F4ADWIB_-mK-HMXV8kwooNi0hcb70o7PzJbz-HkEGss",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
+							}
+						},
+						"url": {
+							"raw": "{{user-api-micro_URL}}",
+							"host": [
+								"{{user-api-micro_URL}}"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "add_noemail",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjExOTkwMiwiZXhwIjoxNzUyMTIzNTAyfQ.QnDEcPDVlnT87JX1eeCy8YXgCyUs2wDyPynTadR23k8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Jon Doe\",\n    \"email\" : \"Add a correct email\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{user-api-micro_URL}}",
+							"host": [
+								"{{user-api-micro_URL}}"
 							]
 						}
 					},
@@ -284,7 +380,7 @@
 			]
 		},
 		{
-			"name": "updateUser2",
+			"name": "modifica usuarios",
 			"event": [
 				{
 					"listen": "test",
@@ -295,7 +391,8 @@
 							"});",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -304,7 +401,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -312,23 +409,56 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/info?id=1",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"info"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1"
-						}
-					]
+					"raw": ""
 				},
 				"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
 			},
-			"response": []
+			"response": [
+				{
+					"name": "updateUser",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjExNDM1NSwiZXhwIjoxNzUyMTE3OTU1fQ.F4ADWIB_-mK-HMXV8kwooNi0hcb70o7PzJbz-HkEGss",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"Javier Orlando Aguirre Araya\" ,\n    \"email\" : \"javier.aguirre.araya@gmail.com\" ,\n    \"password\" : \"Almavel77\" ,\n    \"phones\" : [\n        {\n            \"number\" : \"941894839\" ,\n            \"citycode\" : \"8030\" ,\n            \"contrycode\" : \"56\"\n        },\n         {\n            \"number\" : \"989549924\" ,\n            \"citycode\" : \"8030\" ,\n            \"contrycode\" : \"56\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/api/v1/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"api",
+								"v1",
+								"3"
+							]
+						}
+					},
+					"_postman_previewlanguage": "",
+					"header": [],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": ""
+				}
+			]
 		},
 		{
 			"name": "deleteUser",
@@ -342,7 +472,8 @@
 							"});",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -359,36 +490,40 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/info?id=1",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"info"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1"
-						}
-					]
+					"raw": ""
 				},
 				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
 			},
-			"response": []
-		},
-		{
-			"name": "Obtiene Usuario",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
 			"response": [
 				{
-					"name": "Obtiene Usuario 1",
+					"name": "borra usuario 1",
 					"originalRequest": {
-						"method": "GET",
-						"header": []
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjExNDM1NSwiZXhwIjoxNzUyMTE3OTU1fQ.F4ADWIB_-mK-HMXV8kwooNi0hcb70o7PzJbz-HkEGss",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{user-api-micro_URL}}/2",
+							"host": [
+								"{{user-api-micro_URL}}"
+							],
+							"path": [
+								"2"
+							]
+						}
 					},
 					"_postman_previewlanguage": null,
 					"header": null,
@@ -396,34 +531,6 @@
 					"body": null
 				}
 			]
-		},
-		{
-			"name": "http://localhost:8080/api/v1/users/1",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjAzMDc1MCwiZXhwIjoxNzUyMDM0MzUwfQ.c6b_sJC8P_lycO_KNYV-MnyNFd8zmCIw8lml5pzuuwI",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/api/v1/users/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"users",
-						"1"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"event": [

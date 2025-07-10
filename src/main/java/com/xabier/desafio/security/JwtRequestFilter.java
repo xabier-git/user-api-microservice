@@ -28,6 +28,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtUtil jwtUtil;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        boolean isByPassed = path.equals("/api/v1/login") || path.equals("/api/v1/users/token");
+        logger.info("Ruta bypass: " + path + " - " + isByPassed);
+        return isByPassed;
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
@@ -37,43 +45,42 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             logger.info("URI de la solicitud: " + request.getRequestURI());
 
             // Verificar si el token está presente y es válido
-            // Si no está presente y las rutas que comienzan con /api/v1/users          
-            // Si el token no es válido o está ausente, se envía una respuesta de error 401 Unauthorized
-            // Esto permite que las rutas de usuarios (registro, inicio de sesión) funcionen sin autenticación previa         
+            // Si no está presente y las rutas que comienzan con /api/v1/users
+            // Si el token no es válido o está ausente, se envía una respuesta de error 401
+            // Unauthorized
+            // Esto permite que las rutas de usuarios (registro, inicio de sesión) funcionen
+            // sin autenticación previa
             // Si el token no es válido, se envía una respuesta de error 401 Unauthorized
-            if((authHeader == null || authHeader.isEmpty() || !authHeader.startsWith("Bearer ")
-                    || authHeader.length() < 8 ) && request.getRequestURI().startsWith("/api/v1/users")) {
-                logger.warn("No se encontró el token en la solicitud");
+            if (authHeader == null || authHeader.isEmpty() || !(authHeader.startsWith("Bearer"))
+                /*&& request.getRequestURI().startsWith("/api/v1/users")*/) {
+                logger.warn("Token no proporcionado");
                 sendErrorResponse(response, "Token no proporcionado", HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-            // Si el token está presente, se valida y se establece la autenticación en el contexto
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
-                String token = authHeader.substring(7);
-                logger.debug("Token extraído: " + token);
-                String username = jwtUtil.extractUsername(token);
-                logger.debug("Usuario extraído del token: " + username);
-                if (username != null && jwtUtil.validateToken(token, username)) {
-                    // Aquí se podría configurar la autenticación del usuario
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username,
-                            null,
-                            new ArrayList<>());
+            String token = authHeader.substring(7);
+            logger.debug("Token extraído: " + token);
+            String username = jwtUtil.extractUsername(token);
+            logger.debug("Usuario extraído del token: " + username);
+            if (jwtUtil.validateToken(token, username)) {
+                // Aquí se podría configurar la autenticación del usuario
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username,
+                        null,
+                        new ArrayList<>());
 
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                    logger.info("Token válido para el usuario: " + username);
-                }
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+                logger.info("Token válido para el usuario: " + username);
             }
 
             filterChain.doFilter(request, response);
 
         } catch (ExpiredJwtException ex) {
 
-            logger.warn("Token JWT expirado: {}", ex);
+            logger.warn("Token JWT expirado: {}", ex.getMessage());
             sendErrorResponse(response, "Token expirado", HttpServletResponse.SC_UNAUTHORIZED);
         } catch (JwtException | IllegalArgumentException ex) {
 
-            logger.warn("Token JWT inválido: {}", ex);
+            logger.warn("Token JWT inválido: {}", ex.getMessage());
             sendErrorResponse(response, "Token inválido", HttpServletResponse.SC_UNAUTHORIZED);
         }
     }

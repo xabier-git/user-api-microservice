@@ -4,8 +4,9 @@ import com.xabier.desafio.exception.ValidationException;
 import com.xabier.desafio.model.Phone;
 import com.xabier.desafio.model.User;
 import com.xabier.desafio.repository.UserRepository;
+import com.xabier.desafio.security.JwtUtil;
 import com.xabier.desafio.services.UserService;
-import com.xabier.desafio.utils.Cons;
+import com.xabier.desafio.utils.Constants;
 import com.xabier.desafio.view.PhoneView;
 import com.xabier.desafio.view.UserInput;
 import com.xabier.desafio.view.UserView;
@@ -26,22 +27,26 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
+    private JwtUtil jwtUtil;
+
     private final UserRepository userRepository;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    //@Autowired  No es necesario si se usa constructor
+    public UserServiceImpl(UserRepository userRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
-    public UserView addUser(UserInput userInput, String token) {
+    public UserView addUser(UserInput userInput) {
         logger.info("Añadiendo usuario: " + userInput.name());
 
+        /*  Ahora lo valido con @Valid en UserInput @email 
         // Validar formato de email
-        if (!Pattern.matches(Cons.EMAIL_PATTERN, userInput.email())) {
+        if (!Pattern.matches(Constants.EMAIL_PATTERN, userInput.email())) {
             logger.error("El email no cumple con el formato requerido: " + userInput.email());
             throw new ValidationException("El email no cumple con el formato requerido.", HttpStatus.BAD_REQUEST);
-        }
+        } */
 
         // Validar email único
         if (userRepository.findByEmail(userInput.email()).isPresent()) {
@@ -50,7 +55,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // Validar formato de password
-        if (!Pattern.matches(Cons.PASSWORD_PATTERN, userInput.password())) {
+        if (!Pattern.matches(Constants.PASSWORD_PATTERN, userInput.password())) {
             logger.error("La contraseña no cumple con el formato requerido.");
             throw new ValidationException("La contraseña no cumple con el formato requerido.", HttpStatus.BAD_REQUEST);
         }
@@ -69,6 +74,7 @@ public class UserServiceImpl implements UserService {
         user.setCreated(now);
         user.setModified(now);
         user.setLast_login(now);
+        String token = jwtUtil.generateToken(userInput.email());
         user.setToken(token);
         user.setActive(true);
         //logger.debug("Usuario antes de persistir: " + user);
@@ -118,7 +124,7 @@ public class UserServiceImpl implements UserService {
                         
 
         // Validar formato de email
-        if (!Pattern.matches(Cons.EMAIL_PATTERN, userInput.email())) {
+        if (!Pattern.matches(Constants.EMAIL_PATTERN, userInput.email())) {
             logger.error("El email no cumple con el formato requerido: " + userInput.email());
             throw new ValidationException("El email no cumple con el formato requerido.", HttpStatus.BAD_REQUEST);
         }
@@ -141,7 +147,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // Validar formato de password
-        if (!Pattern.matches(Cons.PASSWORD_PATTERN, userInput.password())) {
+        if (!Pattern.matches(Constants.PASSWORD_PATTERN, userInput.password())) {
             logger.error("La contraseña no cumple con el formato requerido.");
             throw new ValidationException("La contraseña no cumple con el formato requerido.", HttpStatus.BAD_REQUEST);
         }

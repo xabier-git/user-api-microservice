@@ -16,6 +16,7 @@ logging:
   level:
     root: INFO
     com.xabier.desafio: DEBUG
+    org.springframework.security: DEBUG
 
 app:
   security:

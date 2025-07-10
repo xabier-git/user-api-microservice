@@ -50,8 +50,8 @@ public class UserControllerUnitTest {
         userView.setName("Juan Rodriguez");
         userView.setEmail("juan@rodriguez.org");
         // Simular comportamiento del mock del servicio
-        Mockito.when(userService.addUser(Mockito.argThat(input -> input.name().equals("Juan Rodriguez") &&
-                input.email().equals("juan@rodriguez.org")), Mockito.anyString()))
+       Mockito.when(userService.addUser(Mockito.argThat(input -> input.name().equals("Juan Rodriguez") &&
+                input.email().equals("juan@rodriguez.org"))))
                 .thenReturn(userView);
         String json = "{"
                 + "\"name\": \"Juan Rodriguez\","

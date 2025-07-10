@@ -1,6 +1,6 @@
 package com.xabier.desafio.utils;
 
-public abstract class Cons {
+public abstract class Constants {
  // Regular expressions for validation patterns
 
  public static final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";

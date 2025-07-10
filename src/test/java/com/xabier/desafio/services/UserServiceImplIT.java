@@ -29,7 +29,7 @@ public class UserServiceImplIT {
         /*user.setName("Test User");
         user.setEmail("testuser@example.com");
         user.setPassword("Hun77er2");*/
-        UserView userView = userService.addUser(userInput,"");
+        UserView userView = userService.addUser(userInput);
         assertEquals("Test User", userView.getName());
         assertEquals("testuser@example.com", userView.getEmail());
     }
