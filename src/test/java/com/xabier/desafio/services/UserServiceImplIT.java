@@ -1,7 +1,5 @@
 package com.xabier.desafio.services;
 
-import com.xabier.desafio.model.User;
-import com.xabier.desafio.services.UserService;
 import com.xabier.desafio.view.UserInput;
 import com.xabier.desafio.view.UserView;
 import org.junit.jupiter.api.Test;

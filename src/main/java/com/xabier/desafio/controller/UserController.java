@@ -1,15 +1,10 @@
 package com.xabier.desafio.controller;
 
-import com.xabier.desafio.exception.ValidationException;
-
-import com.xabier.desafio.model.User;
 import com.xabier.desafio.security.JwtUtil;
 import com.xabier.desafio.services.UserService;
-import com.xabier.desafio.view.LoginRequest;
 import com.xabier.desafio.view.UserInput;
 import com.xabier.desafio.view.UserView;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import java.util.HashMap;
@@ -24,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/v1/users")
