@@ -13,7 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class UserView {
-    private Long id;
+    private String id;
     private String name;
     private String email;
     private List<PhoneView> phones;

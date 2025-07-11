@@ -44,13 +44,13 @@
 			},
 			"response": [
 				{
-					"name": "getAllUsers",
+					"name": "Trae Todos",
 					"originalRequest": {
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjExNDM1NSwiZXhwIjoxNzUyMTE3OTU1fQ.F4ADWIB_-mK-HMXV8kwooNi0hcb70o7PzJbz-HkEGss",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjE5MDgxOSwiZXhwIjoxNzUyMTk0NDE5fQ.-XFudqG_4JWr6re2vX1gTyhX5stjhl8biPySCcLwojs",
 								"type": "text"
 							}
 						],
@@ -71,23 +71,28 @@
 					"body": ""
 				},
 				{
-					"name": "getUser",
+					"name": "Obtiene Un Usuario",
 					"originalRequest": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjE5MDgxOSwiZXhwIjoxNzUyMTk0NDE5fQ.-XFudqG_4JWr6re2vX1gTyhX5stjhl8biPySCcLwojs",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base_url}}/info?id=1",
+							"raw": "http://localhost:8080/api/v1/users/87d5f211-7aa9-4fd4-ae2c-ad89579c6292",
+							"protocol": "http",
 							"host": [
-								"{{base_url}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
-								"info"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "1"
-								}
+								"api",
+								"v1",
+								"users",
+								"87d5f211-7aa9-4fd4-ae2c-ad89579c6292"
 							]
 						}
 					},
@@ -210,7 +215,7 @@
 					"body": ""
 				},
 				{
-					"name": "addUser_Javier",
+					"name": "ingresa_Javier",
 					"originalRequest": {
 						"method": "POST",
 						"header": [
@@ -415,19 +420,19 @@
 			},
 			"response": [
 				{
-					"name": "updateUser",
+					"name": "Actualiza Javier",
 					"originalRequest": {
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjExNDM1NSwiZXhwIjoxNzUyMTE3OTU1fQ.F4ADWIB_-mK-HMXV8kwooNi0hcb70o7PzJbz-HkEGss",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MjE5MDgxOSwiZXhwIjoxNzUyMTk0NDE5fQ.-XFudqG_4JWr6re2vX1gTyhX5stjhl8biPySCcLwojs",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\" : \"Javier Orlando Aguirre Araya\" ,\n    \"email\" : \"javier.aguirre.araya@gmail.com\" ,\n    \"password\" : \"Almavel77\" ,\n    \"phones\" : [\n        {\n            \"number\" : \"941894839\" ,\n            \"citycode\" : \"8030\" ,\n            \"contrycode\" : \"56\"\n        },\n         {\n            \"number\" : \"989549924\" ,\n            \"citycode\" : \"8030\" ,\n            \"contrycode\" : \"56\"\n        }\n    ]\n}",
+							"raw": "{\n    \"name\" : \"Javier Orlando Aguirre Araya\" ,\n    \"email\" : \"javier.aguirre.araya@gmail.com\" ,\n    \"password\" : \"Almavel77\" ,\n    \"phones\" : [\n        {\n            \"number\" : \"941894839\" ,\n            \"citycode\" : \"100\" ,\n            \"contrycode\" : \"56\"\n        },\n         {\n            \"number\" : \"989549924\" ,\n            \"citycode\" : \"8030\" ,\n            \"contrycode\" : \"56\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -435,17 +440,17 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/api/v1/3",
+							"raw": "http://localhost:8080/api/v1/users/60ddbbc9-519c-4f81-98c2-c3293d629d34",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"users",
 								"api",
 								"v1",
-								"3"
+								"users",
+								"60ddbbc9-519c-4f81-98c2-c3293d629d34"
 							]
 						}
 					},
@@ -516,12 +521,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{user-api-micro_URL}}/2",
+							"raw": "{{user-api-micro_URL}}/87d5f211-7aa9-4fd4-ae2c-ad89579c6292",
 							"host": [
 								"{{user-api-micro_URL}}"
 							],
 							"path": [
-								"2"
+								"87d5f211-7aa9-4fd4-ae2c-ad89579c6292"
 							]
 						}
 					},

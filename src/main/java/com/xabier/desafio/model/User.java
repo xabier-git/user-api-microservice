@@ -6,6 +6,7 @@ import lombok.ToString;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -13,8 +14,9 @@ import java.util.List;
 @ToString
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue()
+    @Column(columnDefinition = "UUID", updatable = false, nullable = false)
+    private UUID id;
 
     private String name;
     private String email;

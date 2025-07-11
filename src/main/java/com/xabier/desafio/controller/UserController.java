@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteUser(@PathVariable Long id)  {
+    public ResponseEntity<?> deleteUser(@PathVariable String id)  {
        
             logger.info("Intentando eliminar usuario con ID: " + id);
             userService.deleteUser(id);
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserView> updateUser(@PathVariable Long id, @RequestBody UserInput userInput)  {
+    public ResponseEntity<UserView> updateUser(@PathVariable String id, @RequestBody UserInput userInput)  {
     
             logger.info("Intentando actualizar usuario con ID: " + id);
             UserView updatedUser = userService.updateUser(id,userInput);
@@ -76,6 +76,9 @@ public class UserController {
 
     }
 
+    /**
+     * Obtiene todos los usuarios del repositorio y los convierte a UserView.
+     */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserView>> getAllUsers()  {
       
@@ -85,7 +88,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserView> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserView> getUserById(@PathVariable String id) {
       
             logger.info("Buscando usuario por ID: " + id);
             UserView userView = userService.getUserById(id);

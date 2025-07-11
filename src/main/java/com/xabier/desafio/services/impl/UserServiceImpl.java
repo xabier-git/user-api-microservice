@@ -63,6 +63,9 @@ public class UserServiceImpl implements UserService {
         // Setear propiedades
         LocalDateTime now = LocalDateTime.now();
         User user = new User();
+        UUID id = UUID.randomUUID();
+        user.setId(id); 
+        logger.debug("ID generado para el usuario: " + user.getId());
         user.setName(userInput.name());
         user.setEmail(userInput.email());
         user.setPassword(userInput.password());
@@ -90,7 +93,7 @@ public class UserServiceImpl implements UserService {
         }
         logger.debug("usuario guardado: " + savedUser);
         return new UserView(
-                savedUser.getId(),
+                savedUser.getId().toString(),
                 savedUser.getName(),
                 savedUser.getEmail(),
                 phoneViews,
@@ -102,23 +105,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void deleteUser(String id) {
         logger.info("Eliminando usuario con ID: " + id);
 
-        if (userRepository.findById(id).isEmpty()) {
+        if (userRepository.findById(UUID.fromString(id)).isEmpty()) {
             logger.error("Usuario no encontrado con ID: " + id);
             throw new ValidationException("El usuario no existe en la base de datos.", HttpStatus.NOT_FOUND);
         } else {
-            userRepository.deleteById(id);
+            userRepository.deleteById(UUID.fromString(id));
             logger.debug("Usuario eliminado con ID: " + id);
         }
     }
 
     @Override
-    public UserView updateUser(Long id, UserInput userInput) {
+    public UserView updateUser(String id, UserInput userInput) {
 
         logger.info("Actualizando usuario: " + userInput.name());
-        User existingUser = userRepository.findById(id)
+        User existingUser = userRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new ValidationException("Usuario no encontrado con ID: " + id,
                         HttpStatus.NOT_FOUND));
                         
@@ -162,7 +165,7 @@ public class UserServiceImpl implements UserService {
         logger.debug("Usuario actualizado: " + existingUser);
 
         return new UserView(
-                existingUser.getId(),
+                existingUser.getId().toString() ,
                 existingUser.getName(),
                 existingUser.getEmail(),
                 existingUser.getPhones().stream()
@@ -175,13 +178,16 @@ public class UserServiceImpl implements UserService {
                 existingUser.isActive());
     }
 
+    /**
+     * Obtiene todos los usuarios del repositorio y los convierte a UserView.
+     */
     @Override
     public List<UserView> getAllUsers() {
         logger.info("Obteniendo todos los usuarios");
         List<User> users = userRepository.findAll();
         return users.stream()
                 .map(user -> new UserView(
-                        user.getId(),
+                        user.getId().toString(),
                         user.getName(),
                         user.getEmail(),
                         user.getPhones() != null ? user.getPhones().stream()
@@ -197,9 +203,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserView getUserById(Long id) {
+    public UserView getUserById(String id) {
         logger.info("Buscando usuario por ID: " + id);
-        User user = userRepository.findById(id)
+        User user = userRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new ValidationException("Usuario no encontrado con ID: " + id,
                         HttpStatus.NOT_FOUND));
 
@@ -212,7 +218,7 @@ public class UserServiceImpl implements UserService {
         }
 
         return new UserView(
-                user.getId(),
+                user.getId().toString(),
                 user.getName(),
                 user.getEmail(),
                 phoneViews,
